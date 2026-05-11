@@ -1,6 +1,6 @@
 # Big Sur StatusArea
 
-## What  is it
+## What is it
 
 A GNOME Shell extension for move the Power/Network/Volume/User/Date/Notifications menus to the status area.
 
@@ -8,7 +8,8 @@ This project is a fork of https://github.com/Fausto-Korpsvart/Big-Sur-StatusArea
 
 ## Requirements
 
-* GNOME Shell >= 3.38
+* GNOME Shell >= 42
+* Meson >= 0.59.0
 
 ## How to contribute
 
@@ -20,21 +21,31 @@ This project is a fork of https://github.com/Fausto-Korpsvart/Big-Sur-StatusArea
 ## Build with Meson
 
 The project uses a build system called [Meson](https://mesonbuild.com/). You can install
-in most Linux distributions as "meson".
+it in most Linux distributions as "meson".
 
-It's possible to read more information in the Meson docs to tweak the configuration if needed.
+It's possible to read more information in the [Meson docs](https://mesonbuild.com/Quick-guide.html) to tweak the configuration if needed.
 
 For a regular use and local development these are the steps to build the
 project and install it:
 
 ```bash
-meson --prefix=$HOME/.local/ --localedir=share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com/locale .build
+meson setup --prefix=$HOME/.local/ --localedir=share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com/locale .build
 ninja -C .build install
 ```
 
 It is strongly recommended to delete the destination folder
 ($HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com) before doing this, to ensure that no old
 data is kept.
+
+## Uninstall
+
+To uninstall the extension:
+
+```bash
+rm -rf $HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com
+```
+
+Then restart GNOME Shell or log out and log back in.
 
 ## Export extension ZIP file for extensions.gnome.org
 
