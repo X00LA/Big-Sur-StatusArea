@@ -15,14 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-const GObject = imports.gi.GObject;
 
-var MenuItems = GObject.registerClass({
+import GObject from 'gi://GObject';
+
+export var MenuItems = GObject.registerClass({
     GTypeName: "MenuItems",
 },
 class MenuItems extends GObject.Object {
-    _init (settings) {
-	super._init();
+    _init(settings) {
+        super._init();
         this.settings = settings;
     }
 
@@ -85,10 +86,13 @@ class MenuItems extends GObject.Object {
     }
 
     itemsToString(itemsArray) {
-        let items = new Array()
+        let items = new Array();
         for (let indexItem in itemsArray) {
             let itemDatasArray = itemsArray[indexItem];
-            let itemDatasString = itemDatasArray["label"] + ";" + (itemDatasArray["enable"] ? "1" : "0") + ";" + (itemDatasArray["position"] ? "1" : "0") + ";" + itemDatasArray["shortcut"];
+            let itemDatasString = itemDatasArray["label"] + ";" +
+                (itemDatasArray["enable"] ? "1" : "0") + ";" +
+                (itemDatasArray["position"] ? "1" : "0") + ";" +
+                itemDatasArray["shortcut"];
             items.push(itemDatasString);
         }
         return items.join("|");
@@ -96,9 +100,8 @@ class MenuItems extends GObject.Object {
 
     getEnableItems() {
         let items = this.getItems();
-        let indexItem;
         let itemsEnable = new Array();
-        for (indexItem in items) {
+        for (let indexItem in items) {
             let item = items[indexItem];
             if (item["enable"]) {
                 itemsEnable.push(item["shortcut"]);
@@ -109,9 +112,8 @@ class MenuItems extends GObject.Object {
 
     getCenterItems() {
         let items = this.getItems();
-        let indexItem;
         let itemsEnable = new Array();
-        for (indexItem in items) {
+        for (let indexItem in items) {
             let item = items[indexItem];
             if (item["enable"] && item["position"]) {
                 itemsEnable.push(item["shortcut"]);
