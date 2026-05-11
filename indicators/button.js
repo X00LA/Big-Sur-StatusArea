@@ -16,67 +16,70 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { St, Shell } = imports.gi;
-const GObject = imports.gi.GObject;
-const PanelMenu = imports.ui.panelMenu;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
+import St from 'gi://St';
+import Shell from 'gi://Shell';
+import GObject from 'gi://GObject';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 
-var CustomButton = GObject.registerClass({
+// settings wird von außen per setSettings() gesetzt (aus extension.js)
+let _settings = null;
+export function setSettings(s) { _settings = s; }
+
+export var CustomButton = GObject.registerClass({
     GTypeName: 'CustomButton',
 },
 class CustomButton extends PanelMenu.Button {
 
-    _init (name) {
+    _init(name) {
         super._init(0.5, name);
-        this.settings = Convenience.getSettings();
         this.name = name;
         this._center = false;
         this.box = new St.BoxLayout({
             vertical: false,
-            style_class: "panel-status-menu-box"
-        });;
+            style_class: 'panel-status-menu-box'
+        });
         this.add_child(this.box);
     }
 
-    _openApp (desktop) {
+    get settings() {
+        return _settings;
+    }
+
+    _openApp(desktop) {
         let app = Shell.AppSystem.get_default().lookup_app(desktop);
         if (app == null)
-           return false;
+            return false;
         app.activate();
         return true;
     }
 
-    set_spacing (spacing) {
+    set_spacing(spacing) {
         this._default_spacing = spacing;
         this.update_spacing(spacing);
     }
 
-    update_spacing (spacing) {
-        if (this.settings.get_boolean("activate-spacing")) {
-            let style = '-natural-hpadding: %dpx'.format(spacing);
-            if (spacing < 6) {
-                style += '; -minimum-hpadding: %dpx'.format(spacing);
-            }
+    update_spacing(spacing) {
+        if (_settings && _settings.get_boolean('activate-spacing')) {
+            let style = `-natural-hpadding: ${spacing}px`;
+            if (spacing < 6)
+                style += `; -minimum-hpadding: ${spacing}px`;
             this.set_style(style);
-	}
-	else
-            this.set_style("");
+        } else {
+            this.set_style('');
+        }
     }
 
-    calculate_spacing () {
+    calculate_spacing() {
         let style = this.get_style();
         if (style) {
-            let start = style.indexOf("-natural-hpadding: ");
-            let end = style.indexOf("px;");
-            let val = parseInt(style.substring(start + 19, end));
-            return val;
+            let start = style.indexOf('-natural-hpadding: ');
+            let end = style.indexOf('px;');
+            return parseInt(style.substring(start + 19, end));
         }
-        return NaN
+        return NaN;
     }
 
-    destroy () {
-        super.destroy()
+    destroy() {
+        super.destroy();
     }
 });
