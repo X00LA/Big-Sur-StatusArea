@@ -24,15 +24,15 @@ msgstr "Einstellungen"
 
 #: ../prefs.js:193
 msgid "User/System Indicator"
-msgstr "Benutzer/System-Anzeige"
+msgstr "Benutzer- und Systemanzeige"
 
 #: ../prefs.js:197
 msgid "Show an icon instead of name"
-msgstr "Symbol statt Namen anzeigen"
+msgstr "Symbol anstelle des Namens anzeigen"
 
 #: ../prefs.js:214
 msgid "Calendar Indicator"
-msgstr "Kalender-Anzeige"
+msgstr "Kalenderanzeige"
 
 #: ../prefs.js:218
 msgid "Change date format"
@@ -40,11 +40,11 @@ msgstr "Datumsformat ändern"
 
 #: ../prefs.js:251
 msgid "Power Indicator"
-msgstr "Energie-Anzeige"
+msgstr "Energieanzeige"
 
 #: ../prefs.js:255
 msgid "Show battery percentage"
-msgstr "Batterieprozentsatz anzeigen"
+msgstr "Batteriestand in Prozent anzeigen"
 
 #: ../prefs.js:279
 msgid "Position and size"
@@ -52,15 +52,15 @@ msgstr "Position und Größe"
 
 #: ../prefs.js:283
 msgid "Indicators padding"
-msgstr "Abstand zwischen den Anzeigern"
+msgstr "Abstand zwischen den Anzeigen"
 
 #: ../prefs.js:283
 msgid "Unified Calendar/Notification Indicator"
-msgstr "Unified Kalender/Benachrichtigung Indikator."
+msgstr "Kombinierte Kalender- und Benachrichtigungsanzeige"
 
 #: ../prefs.js:330
 msgid "Indicators Order"
-msgstr "Reihenfolge der Anzeiger"
+msgstr "Reihenfolge der Anzeigen"
 
 #: ../prefs.js:350
 msgid "Left"
@@ -68,15 +68,15 @@ msgstr "Links"
 
 #: ../prefs.js:351
 msgid "Center"
-msgstr "Mittig"
+msgstr "Zentriert"
 
 #: ../prefs.js:404
 msgid "Top to bottom -> Left to right"
-msgstr "Oben nach unten -> Links nach rechts"
+msgstr "Oben nach unten → links nach rechts"
 
 #: ../prefs.js:409
 msgid "Reset Indicators"
-msgstr "Anzeiger zurücksetzen"
+msgstr "Anzeigen zurücksetzen"
 
 #: ../prefs.js:415
 msgid "Reset"
@@ -84,7 +84,7 @@ msgstr "Zurücksetzen"
 
 #: ../prefs.js:452
 msgid "About"
-msgstr "Info"
+msgstr "Über"
 
 #: ../prefs.js:484
 msgid "Version: "
@@ -92,18 +92,15 @@ msgstr "Version: "
 
 #: ../prefs.js:493
 msgid "If something breaks, don't hesitate to leave a comment at "
-msgstr ""
-"Wenn etwas nicht klappt, hinterlassen Sie dazu gerne einen Kommentar auf "
+msgstr "Falls etwas nicht funktioniert, hinterlassen Sie bitte einen Kommentar unter "
 
 #: ../prefs.js:497
 msgid "Webpage/Github"
-msgstr "Internetseite/Github"
+msgstr "Webseite / GitHub"
 
 #: ../prefs.js:508
 msgid "This extension is a fork of Extend Panel Menu, thanks to julio641742"
-msgstr ""
-"Diese Erweiterung ist eine Abspaltung von Extend Panel Menu, Danke dafür an "
-"julio641742"
+msgstr "Diese Erweiterung basiert auf „Extend Panel Menu“. Vielen Dank an julio641742"
 
 #: ../indicators/bluetooth.js:70
 msgid "Bluetooth Settings"
@@ -111,11 +108,11 @@ msgstr "Bluetooth-Einstellungen"
 
 #: ../indicators/calendar.js:101
 msgid "No Events"
-msgstr "Keine Ereignisse"
+msgstr "Keine Termine"
 
 #: ../indicators/calendar.js:129
 msgid "Date Time Settings"
-msgstr "Einstellungen für Datum und Zeit"
+msgstr "Datum- und Uhrzeiteinstellungen"
 
 #: ../indicators/network.js:79
 msgid "Network Settings"
@@ -123,7 +120,7 @@ msgstr "Netzwerkeinstellungen"
 
 #: ../indicators/nightlight.js:70
 msgid "Temperature"
-msgstr "Temperatur"
+msgstr "Farbtemperatur"
 
 #: ../indicators/nightlight.js:88 ../indicators/nightlight.js:132
 msgid "Resume"
@@ -131,15 +128,15 @@ msgstr "Fortsetzen"
 
 #: ../indicators/nightlight.js:92 ../indicators/nightlight.js:128
 msgid "Turn Off"
-msgstr "Ausschalten"
+msgstr "Deaktivieren"
 
 #: ../indicators/nightlight.js:96
 msgid "Display Settings"
-msgstr "Bildschirmeinstellungen"
+msgstr "Anzeigeeinstellungen"
 
 #: ../indicators/nightlight.js:128
 msgid "Turn On"
-msgstr "Einschalten"
+msgstr "Aktivieren"
 
 #: ../indicators/nightlight.js:131
 msgid "Night Light Disabled"
@@ -147,11 +144,11 @@ msgstr "Nachtmodus deaktiviert"
 
 #: ../indicators/nightlight.js:131
 msgid "Night Light On"
-msgstr "Nachtmodus ist an"
+msgstr "Nachtmodus aktiv"
 
 #: ../indicators/nightlight.js:132
 msgid "Disable Until Tomorrow"
-msgstr "Ausschalten bis morgen"
+msgstr "Bis morgen deaktivieren"
 
 #: ../indicators/power.js:64
 msgid "Power Settings"
@@ -183,7 +180,7 @@ msgstr "Bildschirmdrehung sperren"
 
 #: ../indicators/system.js:180
 msgid "Suspend"
-msgstr "Ruhezustand"
+msgstr "Energie sparen"
 
 #: ../indicators/system.js:201
 msgid "Power Off"
@@ -217,19 +214,19 @@ msgid "Power"
 msgstr "Energie"
 
 msgid "Notification"
-msgstr "Benachrichtigung"
+msgstr "Benachrichtigungen"
 
 msgid "User"
 msgstr "Benutzer"
 
 msgid "Indicator padding"
-msgstr "Indikator Polsterung"
+msgstr "Abstand der Anzeigen"
 
 msgid "Enable toggle for custom indicator padding"
-msgstr "Toggle für benutzerdefinierte Indikatorpolsterung einschalten"
+msgstr "Benutzerdefinierten Abstand zwischen Anzeigen aktivieren"
 
 msgid "Enable toggle for individual calendar and notification indicators (gnome-shell restart required for effect)"
-msgstr "Umschalter für individuelle Kalender- und Benachrichtigungsanzeigen aktivieren (Neustart der Gnome-Shell für Wirkung erforderlich)"
+msgstr "Separate Kalender- und Benachrichtigungsanzeigen aktivieren (Neustart der GNOME-Shell erforderlich)"
 
 #~ msgid "Night Light Indicator"
 #~ msgstr "Nachtmodus"
