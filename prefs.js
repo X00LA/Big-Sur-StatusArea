@@ -50,7 +50,7 @@ class IconButton extends Gtk.Button {
                 icon_name: params["icon_name"],
                 xalign: 0.46
             });
-            this.add(image);
+            this.append(image);
         }
     }
 });
@@ -74,7 +74,7 @@ class DialogWindow extends Gtk.Dialog {
         vbox.set_spacing(20);
 
         this._createLayout(vbox);
-        this.get_content_area().add(vbox);
+        this.get_content_area().append(vbox);
     }
 
     _createLayout (vbox) {
@@ -527,7 +527,7 @@ class IndicatorsPage extends NotebookPage {
 	else {
 	    for(let x = 0; x < this.labelsArray.length; x++) {
 		 if (this.labelsArray[x] == _("Calendar")) {
-                     this.statusArray[x].set_active(false);
+                      this.statusArray[x].set_active(false);
 		 }
 	    }
             this.settings.set_boolean("separate-date-and-notification" , false);
