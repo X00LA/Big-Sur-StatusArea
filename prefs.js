@@ -16,30 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const Gio = imports.gi.Gio;
-const Gtk = imports.gi.Gtk;
-const GLib = imports.gi.GLib;
-const GObject = imports.gi.GObject;
-const GdkPixbuf = imports.gi.GdkPixbuf;
-const Gettext = imports.gettext.domain("bigSur-StatusArea");
-const _ = Gettext.gettext;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-const Convenience = Me.imports.convenience;
-
-const Extension = imports.misc.extensionUtils.getCurrentExtension();
-const MenuItems = Extension.imports.menuItems;
-
-function init() {
-    Convenience.initTranslations("bigSur-StatusArea");
-}
+import Gio from 'gi://Gio';
+import Gtk from 'gi://Gtk';
+import GLib from 'gi://GLib';
+import GObject from 'gi://GObject';
+import GdkPixbuf from 'gi://GdkPixbuf';
+import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import { MenuItems } from './menuItems.js';
 
 const IconButton = GObject.registerClass({
     GTypeName: "IconButton",
 },
 class IconButton extends Gtk.Button {
 
-    _init (params) {
+    _init(params) {
         super._init({});
         if (params["circular"]) {
             let context = this.get_style_context();
@@ -60,10 +50,10 @@ var DialogWindow = GObject.registerClass({
 },
 class DialogWindow extends Gtk.Dialog {
 
-    _init (title, parent) {
+    _init(title, parent) {
         super._init({
             title: title,
-            transient_for: parent.get_toplevel(),
+            transient_for: parent.get_root(),
             use_header_bar: true,
             modal: true
         });
@@ -77,24 +67,22 @@ class DialogWindow extends Gtk.Dialog {
         this.get_content_area().append(vbox);
     }
 
-    _createLayout (vbox) {
+    _createLayout(vbox) {
         throw "Not implemented!";
     }
 });
 
 const NotebookPage = GObject.registerClass({
     GTypeName: "NotebookPage",
-    
 },
 class NotebookPage extends Gtk.Box {
 
-    _init  (title) {
+    _init(title) {
         super._init({
             orientation: Gtk.Orientation.VERTICAL,
         });
-        // this.set_margin(24);
         this.set_homogeneous(false);
-	this.set_spacing(20);
+        this.set_spacing(20);
         this.title = new Gtk.Label({
             label: "<b>" + title + "</b>",
             use_markup: true,
@@ -107,17 +95,16 @@ var FrameBox = GObject.registerClass({
     GTypeName: "FrameBox",
 },
 class FrameBox extends Gtk.Frame {
-    _init (label) {
+    _init(label) {
         this._listBox = new Gtk.ListBox();
         this._listBox.set_selection_mode(Gtk.SelectionMode.NONE);
         super._init({
             child: this._listBox
         });
-        // label_yalign: 0.50;
         this.label = label;
     }
 
-    add (boxRow) {
+    add(boxRow) {
         this._listBox.append(boxRow);
     }
 });
@@ -127,53 +114,17 @@ var FrameBoxRow = GObject.registerClass({
 },
 class FrameBoxRow extends Gtk.ListBoxRow {
 
-    _init () {
+    _init() {
         this._box = new Gtk.Box({
             orientation: Gtk.Orientation.HORIZONTAL,
         });
-        //this.set_margin(5);
-        //this.set_row_spacing(20);
-        //this.set_column_spacing(20);
         super._init({
             child: this._box
         });
     }
 
-    add (widget) {
+    add(widget) {
         this._box.append(widget);
-    }
-});
-
-const PrefsWidget = GObject.registerClass({
-    GTypeName: "PrefsWidget",
-    //Name: "Prefs.Widget",
-},
-class PrefsWidgets extends Gtk.Box {
-
-    _init () {
-        super._init({
-            orientation: Gtk.Orientation.VERTICAL,
-        });
-        this.set_spacing(5);
-        // this.add_ccs_class("box-prefs-widget");
-        this.settings = Convenience.getSettings();
-        this.menuItems = new MenuItems.MenuItems(this.settings);
-
-        let notebook = new Gtk.Notebook();
-        notebook.set_margin_start(6);
-        notebook.set_margin_end(6);
-
-        let settingsPage = new SettingsPage(this.settings);
-
-        notebook.append_page(settingsPage, settingsPage.title);
-
-        let indicatorsPage = new IndicatorsPage(this.settings, this.menuItems);
-        notebook.append_page(indicatorsPage, indicatorsPage.title);
-
-        let aboutPage = new AboutPage(this.settings);
-        notebook.append_page(aboutPage, aboutPage.title);
-
-        this.append(notebook);
     }
 });
 
@@ -182,20 +133,16 @@ var SettingsPage = GObject.registerClass({
 },
 class SettingsPage extends NotebookPage {
 
-    _init (settings) {
+    _init(settings) {
         super._init(_("Settings"));
         this.settings = settings;
         this.desktopSettings = new Gio.Settings({
             schema_id: "org.gnome.desktop.interface"
         });
 
-        //
-         // User Settings
-         //
+        // User Settings
         let userFrame = new FrameBox(_("User/System Indicator"));
-        userFrame.show();
         let nameIconRow = new FrameBoxRow();
-        nameIconRow.show();
         let nameIconLabel = new Gtk.Label({
             label: _("Show an icon instead of name"),
             xalign: 0,
@@ -205,59 +152,37 @@ class SettingsPage extends NotebookPage {
             halign: Gtk.Align.END
         });
         this.settings.bind("user-icon", nameIconSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
-
         nameIconRow.add(nameIconLabel);
         nameIconRow.add(nameIconSwitch);
-
         userFrame.add(nameIconRow);
 
-        //
-         // Calendar Settings
-         ///
+        // Calendar Settings
         let calendarFrame = new FrameBox(_("Calendar Indicator"));
-        calendarFrame.show();
         let dateFormatRow = new FrameBoxRow();
-        dateFormatRow.show();
-
         let dateFormatLabel = new Gtk.Label({
             label: _("Change date format"),
             xalign: 0,
             hexpand: true
         });
-        dateFormatLabel.show();
         let dateFormatWikiButton = new Gtk.LinkButton({
             label: _("wiki"),
             uri: "https://help.gnome.org/users/gthumb/unstable/gthumb-date-formats.html",
-            //xalign: 0,
-            //hexpand: true,
-            //image: new Gtk.Image({
-            //icon_name: "emblem-web",
-            //xalign: 0.46
-            //})
         });
-        dateFormatWikiButton.show();
         let context = dateFormatWikiButton.get_style_context();
         context.add_class("circular");
-
         let dateFormatEntry = new Gtk.Entry({
             hexpand: true,
             halign: Gtk.Align.END
         });
-        dateFormatEntry.show();
         this.settings.bind("date-format", dateFormatEntry, "text", Gio.SettingsBindFlags.DEFAULT);
-
         dateFormatRow.add(dateFormatLabel);
         dateFormatRow.add(dateFormatWikiButton);
         dateFormatRow.add(dateFormatEntry);
-
         calendarFrame.add(dateFormatRow);
 
-        //
-         // Power Settings
-         ///
+        // Power Settings
         let powerFrame = new FrameBox(_("Power Indicator"));
         let showPercentageLabelRow = new FrameBoxRow();
-
         showPercentageLabelRow.add(new Gtk.Label({
             label: _("Show battery percentage"),
             xalign: 0,
@@ -268,10 +193,9 @@ class SettingsPage extends NotebookPage {
         });
         this.desktopSettings.bind("show-battery-percentage", showPercentageLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
         showPercentageLabelRow.add(showPercentageLabelSwitch);
-
         powerFrame.add(showPercentageLabelRow);
 
-        // add the frames
+        // Add frames
         this.append(userFrame);
         this.append(calendarFrame);
         this.append(powerFrame);
@@ -283,19 +207,17 @@ var IndicatorsPage = GObject.registerClass({
 },
 class IndicatorsPage extends NotebookPage {
 
-    _init (settings, menuItems) {
+    _init(settings, menuItems) {
         super._init(_("Position and size"));
         this.settings = settings;
         this.menuItems = menuItems;
 
         this.separatingBox = new FrameBox(_("Unified Calendar/Notification Indicator"));
-
         this.append(this.separatingBox);
-/////////////////////////////////////////////////////////////////////////////////////
-        this.spacingBox = new FrameBox(_("Indicator padding"));
-	
-        let activateSpacingLabelRow = new FrameBoxRow();
 
+        this.spacingBox = new FrameBox(_("Indicator padding"));
+
+        let activateSpacingLabelRow = new FrameBoxRow();
         activateSpacingLabelRow.add(new Gtk.Label({
             label: _("Enable toggle for custom indicator padding"),
             xalign: 0,
@@ -307,7 +229,6 @@ class IndicatorsPage extends NotebookPage {
         this.spacingBox.add(activateSpacingLabelRow);
 
         this.spacingRow = new FrameBoxRow();
-
         this.spacingLabel = new Gtk.Label({
             label: "",
             xalign: 0,
@@ -327,8 +248,8 @@ class IndicatorsPage extends NotebookPage {
             hexpand: true,
             value_pos: Gtk.PositionType.RIGHT
         });
-        this.spacingScale.connect("value-changed", function (scale, value) {
-            return (value ? value.toString(): "0") + " px";
+        this.spacingScale.connect("value-changed", function(scale, value) {
+            return (value ? value.toString() : "0") + " px";
         });
         this.spacingScale.add_mark(9, Gtk.PositionType.BOTTOM, "");
         this.spacingScale.set_value(this.settings.get_int("spacing"));
@@ -336,22 +257,18 @@ class IndicatorsPage extends NotebookPage {
 
         this.spacingRow.add(this.spacingLabel);
         this.spacingRow.add(this.spacingScale);
-
         this.spacingBox.add(this.spacingRow);
 
-        this.settings.bind("activate-spacing" , activateSpacingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
+        this.settings.bind("activate-spacing", activateSpacingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
         activateSpacingLabelSwitch.connect("notify", this.spacingEnable.bind(this));
         activateSpacingLabelRow.add(activateSpacingLabelSwitch);
 
         this.append(this.spacingBox);
 
-
         this.indicatorsFrame = new FrameBox("");
         this.buildList();
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
         let activateSeparatingLabelRow = new FrameBoxRow();
-
         activateSeparatingLabelRow.add(new Gtk.Label({
             label: _("Enable toggle for individual calendar and notification indicators (gnome-shell restart required for effect)"),
             xalign: 0,
@@ -360,23 +277,22 @@ class IndicatorsPage extends NotebookPage {
         let activateSeparatingLabelSwitch = new Gtk.Switch({
             halign: Gtk.Align.END
         });
-        this.settings.bind("separate-date-and-notification" , activateSeparatingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
+        this.settings.bind("separate-date-and-notification", activateSeparatingLabelSwitch, "active", Gio.SettingsBindFlags.DEFAULT);
         activateSeparatingLabelSwitch.connect("notify", this.separatingEnable.bind(this));
         activateSeparatingLabelRow.add(activateSeparatingLabelSwitch);
 
         this.separatingBox.add(activateSeparatingLabelRow);
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // add the frames
+
+        // Add the frames
         this.append(this.indicatorsFrame);
-        this.spacingBox.show(); //add_actor(this.spacingRow);
+        this.spacingBox.show();
     }
 
-    getSpacingScale () {
-            this.settings.set_int("spacing", this.spacingScale.get_value());
+    getSpacingScale() {
+        this.settings.set_int("spacing", this.spacingScale.get_value());
     }
 
-    buildList () {
-
+    buildList() {
         this.remove(this.indicatorsFrame);
         this.indicatorsFrame = new FrameBox(_("Indicators Order"));
         this.append(this.indicatorsFrame);
@@ -390,7 +306,6 @@ class IndicatorsPage extends NotebookPage {
             let item = items[indexItem];
 
             let indicatorRow = new FrameBoxRow();
-
             let indicatorLabel = new Gtk.Label({
                 label: _(item["label"]),
                 xalign: 0,
@@ -404,7 +319,7 @@ class IndicatorsPage extends NotebookPage {
             positionCombo.append_text(_("Center"));
             positionCombo.set_active(item["position"]);
             positionCombo.connect("changed", () => {
-                 this.enableCenter(positionCombo, indexItem);
+                this.enableCenter(positionCombo, indexItem);
             });
 
             let statusSwitch = new Gtk.Switch({
@@ -415,29 +330,25 @@ class IndicatorsPage extends NotebookPage {
                 this.changeEnable(statusSwitch, null, indexItem);
             });
 
-
             let buttonBox = new Gtk.Box({
                 halign: Gtk.Align.END
             });
-
-            let context = buttonBox.get_style_context();
-            context.add_class("linked");
+            let btnContext = buttonBox.get_style_context();
+            btnContext.add_class("linked");
 
             let buttonUp = new Gtk.Button();
             buttonUp.set_icon_name("go-up-symbolic");
-
             if (indexItem > 0) {
                 buttonUp.connect("clicked", () => {
-                      this.changeOrder(null, indexItem, -1);
+                    this.changeOrder(null, indexItem, -1);
                 });
             }
 
             let buttonDown = new Gtk.Button();
             buttonDown.set_icon_name("go-down-symbolic");
-
             if (indexItem < items.length - 1) {
                 buttonDown.connect("clicked", () => {
-                      this.changeOrder(null, indexItem, 1);
+                    this.changeOrder(null, indexItem, 1);
                 });
             }
 
@@ -471,10 +382,9 @@ class IndicatorsPage extends NotebookPage {
             label: _("Reset"),
             can_focus: true
         });
-        // resetButton.get_style_context().add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
         resetButton.connect("clicked", this.resetPosition.bind(this));
-
         resetIndicatorsRow.add(resetButton);
+
         this.indicatorsFrame.add(positionRow);
         this.indicatorsFrame.add(resetIndicatorsRow);
 
@@ -482,56 +392,53 @@ class IndicatorsPage extends NotebookPage {
         this.indicatorsArray.push(resetIndicatorsRow);
     }
 
-    changeOrder (o, index, order) {
+    changeOrder(o, index, order) {
         this.menuItems.changeOrder(index, order);
         this.buildList();
     }
 
-    changeEnable (object, p, index) {
+    changeEnable(object, p, index) {
         let items = this.menuItems.getItems();
         let item = items[index];
-
         if (_(item["label"]) == _("Calendar") &&
-           !this.settings.get_boolean("separate-date-and-notification")) {
+            !this.settings.get_boolean("separate-date-and-notification")) {
             object.set_active(false);
-       }
-       else
+        } else {
             this.menuItems.changeEnable(index, object.active);
+        }
     }
 
-    enableCenter (object, index) {
+    enableCenter(object, index) {
         this.menuItems.changePosition(index, object.get_active());
         this.changeOrder(null, index, -index);
     }
 
-    resetPosition () {
+    resetPosition() {
         this.settings.set_value("items", this.settings.get_default_value("items"));
         this.buildList();
     }
 
-    spacingEnable (object, p) {
+    spacingEnable(object, p) {
         if (object.active) {
             this.settings.set_boolean("activate-spacing", true);
             this.spacingRow.show();
-	}
-	else {
+        } else {
             this.spacingRow.hide();
             this.settings.set_boolean("activate-spacing", false);
-	}
+        }
     }
 
-    separatingEnable (object, p) {
+    separatingEnable(object, p) {
         if (object.active) {
-            this.settings.set_boolean("separate-date-and-notification" , true);
-	}
-	else {
-	    for(let x = 0; x < this.labelsArray.length; x++) {
-		 if (this.labelsArray[x] == _("Calendar")) {
-                      this.statusArray[x].set_active(false);
-		 }
-	    }
-            this.settings.set_boolean("separate-date-and-notification" , false);
-	}
+            this.settings.set_boolean("separate-date-and-notification", true);
+        } else {
+            for (let x = 0; x < this.labelsArray.length; x++) {
+                if (this.labelsArray[x] == _("Calendar")) {
+                    this.statusArray[x].set_active(false);
+                }
+            }
+            this.settings.set_boolean("separate-date-and-notification", false);
+        }
     }
 });
 
@@ -540,24 +447,23 @@ var AboutPage = GObject.registerClass({
 },
 class AboutPage extends NotebookPage {
 
-    _init (settings) {
+    _init(settings, extension) {
         super._init(_("About"));
         this.settings = settings;
 
-        let releaseVersion = Me.metadata["version"];
-        let projectName = Me.metadata["name"];
-        let projectDescription = Me.metadata["description"];
-        let projectUrl = Me.metadata["url"];
-        let logoPath = Me.path + "/icons/logo.svg";
+        let releaseVersion = extension.metadata["version"];
+        let projectName = extension.metadata["name"];
+        let projectDescription = extension.metadata["description"];
+        let projectUrl = extension.metadata["url"];
+        let logoPath = extension.path + "/icons/logo.svg";
         let [imageWidth, imageHeight] = [128, 128];
         let pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(logoPath, imageWidth, imageHeight);
         let menuImage = new Gtk.Image();
         menuImage.set_from_pixbuf(pixbuf);
-        let menuImageBox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+        let menuImageBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
         menuImageBox.append(menuImage);
 
-        // Create the info box
-        let menuInfoBox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+        let menuInfoBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
         let menuLabel = new Gtk.Label({
             label: "<b>Panel Indicators</b>",
             use_markup: true,
@@ -587,14 +493,13 @@ class AboutPage extends NotebookPage {
             justify: Gtk.Justification.CENTER,
         });
 
-        // Create the GNU software box
         let gnuSofwareLabel = new Gtk.Label({
             label: '<span size="small">This program comes with ABSOLUTELY NO WARRANTY.\n' +
                 'See the <a href="http://www.gnu.org/licenses/gpl-3.0.html">GNU General Public License version 3</a> for details.</span>',
             use_markup: true,
             justify: Gtk.Justification.CENTER,
         });
-        let gnuSofwareLabelBox = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
+        let gnuSofwareLabelBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
         gnuSofwareLabelBox.append(gnuSofwareLabel);
 
         this.append(menuImageBox);
@@ -604,11 +509,34 @@ class AboutPage extends NotebookPage {
     }
 });
 
-function buildPrefsWidget() {
-    let widget = new PrefsWidget();
-    widget.show();
+// GNOME 45+ API: Export einer ExtensionPreferences-Klasse statt init()/buildPrefsWidget()
+export default class PanelIndicatorsPreferences extends ExtensionPreferences {
+    fillPreferencesWindow(window) {
+        const settings = this.getSettings();
+        let menuItems = new MenuItems(settings);
 
-    return widget;
+        let notebook = new Gtk.Notebook();
+        notebook.set_margin_start(6);
+        notebook.set_margin_end(6);
+
+        let settingsPage = new SettingsPage(settings);
+        notebook.append_page(settingsPage, settingsPage.title);
+
+        let indicatorsPage = new IndicatorsPage(settings, menuItems);
+        notebook.append_page(indicatorsPage, indicatorsPage.title);
+
+        let aboutPage = new AboutPage(settings, this);
+        notebook.append_page(aboutPage, aboutPage.title);
+
+        // Wrap notebook in a page for the preferences window
+        const page = new Gtk.Box({
+            orientation: Gtk.Orientation.VERTICAL,
+            margin_top: 12,
+            margin_bottom: 12,
+            margin_start: 12,
+            margin_end: 12,
+        });
+        page.append(notebook);
+        window.add(page);
+    }
 }
-
-
