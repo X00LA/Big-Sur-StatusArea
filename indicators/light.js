@@ -1,4 +1,4 @@
-/* Panel indicators GNOME Shell extension
+/* Panel Indicators GNOME Shell extension
  *
  * Copyright (C) 2019 Leandro Vital <leavitals@gmail.com>
  *
@@ -16,40 +16,39 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-const { St, UPowerGlib, Clutter } = imports.gi;
-const GObject = imports.gi.GObject;
-const Main = imports.ui.main;
-const PopupMenu = imports.ui.popupMenu;
-const Gettext = imports.gettext.domain("bigSur-StatusArea");
-const _ = Gettext.gettext;
-const Extension = imports.misc.extensionUtils.getCurrentExtension();
-const CustomButton = Extension.imports.indicators.button.CustomButton;
+import St from 'gi://St';
+import GObject from 'gi://GObject';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import { CustomButton } from './button.js';
 
-var LightIndicator = GObject.registerClass({
-    GTypeName: "LightIndicator",
+export var LightIndicator = GObject.registerClass({
+    GTypeName: 'LightIndicator',
 },
 class LightIndicator extends CustomButton {
 
-    _init () {
-        super._init("LightIndicator");
-        this.menu.actor.add_style_class_name("aggregate-menu");
-    
+    _init() {
+        super._init('LightIndicator');
+        this.menu.actor.add_style_class_name('aggregate-menu');
+
         this._brightness = Main.panel.statusArea.aggregateMenu._brightness;
         this._brightnessIcon = new St.Icon({
-            icon_name: "display-brightness-symbolic",
-            style_class: "system-status-icon"
+            icon_name: 'display-brightness-symbolic',
+            style_class: 'system-status-icon',
         });
         this.box.add_child(this._brightnessIcon);
+
         Main.panel.statusArea.aggregateMenu.menu.box.remove_actor(this._brightness.menu.actor);
         this.menu.box.add_actor(this._brightness.menu.actor);
 
         this._separator = new PopupMenu.PopupSeparatorMenuItem();
         this.menu.addMenuItem(this._separator);
     }
-    destroy () {
-        this.box.remove_child(this._brightnessIcon);
-        this.menu.box.remove_actor(this._brightness.menu.actor);
+
+    destroy() {
+        try { this.box.remove_child(this._brightnessIcon); } catch (_) {}
+        try { this.menu.box.remove_actor(this._brightness.menu.actor); } catch (_) {}
         Main.panel.statusArea.aggregateMenu.menu.box.add_actor(this._brightness.menu.actor);
-        super.destroy()
+        super.destroy();
     }
 });
