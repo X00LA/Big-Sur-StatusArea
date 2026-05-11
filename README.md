@@ -4,12 +4,12 @@
 
 A GNOME Shell extension for move the Power/Network/Volume/User/Date/Notifications menus to the status area.
 
-This project is a fork of https://github.com/Fausto-Korpsvart/Big-Sur-StatusArea
+This project is a fork of [ThierryHFR/Big-Sur-StatusArea](https://github.com/ThierryHFR/Big-Sur-StatusArea)
 
 ## Requirements
 
-* GNOME Shell >= 42
-* Meson >= 0.59.0
+* GNOME Shell >= 45
+* Meson >= 1.7.0
 
 ## How to contribute
 
@@ -29,12 +29,18 @@ For a regular use and local development these are the steps to build the
 project and install it:
 
 ```bash
-meson setup --prefix=$HOME/.local/ --localedir=share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com/locale .build
-ninja -C .build install
+meson setup --prefix=$HOME/.local/ --localedir=share/gnome-shell/extensions/bigSur-StatusArea@gooberguild.com/locale .build && sudo ninja -C .build install
 ```
 
 It is strongly recommended to delete the destination folder
-($HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com) before doing this, to ensure that no old
+```bash
+rm -rf $HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com
+```
+or
+```bash
+rm -rf $HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@gooberguild.com
+```
+before doing this, to ensure that no old
 data is kept.
 
 ## Uninstall
@@ -43,6 +49,10 @@ To uninstall the extension:
 
 ```bash
 rm -rf $HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@ordissimo.com
+```
+or
+```bash
+rm -rf $HOME/.local/share/gnome-shell/extensions/bigSur-StatusArea@gooberguild.com
 ```
 
 Then restart GNOME Shell or log out and log back in.
