@@ -1,13 +1,14 @@
 project('bigSur-StatusArea',
-  version: '19.10.0',
-  license: 'GPL3'
+  version: '100',
+  meson_version: '>= 0.59.0',
+  license: 'GPL-3.0'
 )
 
-gnome = import ('gnome')
+gnome = import('gnome')
 i18n = import('i18n')
 
 prefix = get_option('prefix')
-datadir = join_paths (prefix, get_option('datadir'))
+datadir = join_paths(prefix, get_option('datadir'))
 schema_dir = join_paths(datadir, 'glib-2.0', 'schemas')
 
 extensions_dir = join_paths(prefix, 'share', 'gnome-shell', 'extensions', 'bigSur-StatusArea@ordissimo.com')
@@ -26,17 +27,9 @@ install_data([
   install_dir: extensions_dir
 )
 
-subdir(
-  'icons'
-)
-subdir(
-  'indicators'
-)
-subdir(
-  'locale'
-)
-subdir(
-  'schemas'
-)
+subdir('icons')
+subdir('indicators')
+subdir('locale')
+subdir('schemas')
 
 meson.add_install_script('meson_post_install.py')
