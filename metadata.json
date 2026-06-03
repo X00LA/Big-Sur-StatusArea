@@ -1,5 +1,4 @@
 {
-  {
   "description": "Move the Power/Network/Volume/User/Date/Notifications menus to the status area. It is a fork of:",
   "forks": [
     {
@@ -22,9 +21,11 @@
     "45",
     "46",
     "47",
-    "48"
+    "48",
+    "49",
+    "50"
   ],
   "url": "https://github.com/Ordissimo/Big-Sur-StatusArea",
   "uuid": "bigSur-StatusArea@gooberguild.com",
-  "version": 101
+  "version": 102
 }
